@@ -1,4 +1,3 @@
-export const runtime = "edge";
 import { NextResponse } from "next/server";
 import { getSession, getOrders, addOrder } from "@/lib/store";
 import { byId, COUPONS, FREE_SHIPPING_THRESHOLD_PAISE, SHIPPING_FLAT_PAISE } from "@/lib/catalogue";

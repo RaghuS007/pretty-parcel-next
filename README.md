@@ -50,15 +50,25 @@ src/
 └── db/schema.ts       Drizzle schema for Neon Postgres
 ```
 
+## Cloudflare Workers
+
+This app is configured for Cloudflare Workers via OpenNext.
+
+```bash
+npm run preview   # build and run locally in the Cloudflare workerd runtime
+npm run deploy    # build and deploy to Cloudflare Workers
+```
+
+For a real account deploy, set `CLOUDFLARE_API_TOKEN` before running `npm run deploy`. The checked-in `wrangler.toml` targets `pretty-parcel-next` and serves static assets from `.open-next/assets`.
+
 ## Going to production (in order)
 
-1. **Neon**: create a project (Mumbai/`ap-southeast-1`), set `DATABASE_URL` in `.env`, run `npm run db:push`, then replace the in-memory calls in `src/lib/store.ts` with Drizzle queries — every swap point is marked `// PROD:`.
-2. **MSG91**: complete TRAI DLT registration for the OTP template, set `MSG91_AUTH_KEY` + `MSG91_TEMPLATE_ID` — `sendOtp()` in `store.ts` already calls the MSG91 API when the key is present.
-3. **Upstash Redis**: swap the in-memory `rateLimit()` for `@upstash/ratelimit` (same call signature).
-4. **Payments**: in `POST /api/orders`, create a Razorpay/Cashfree order before saving, and confirm the order only from the payment webhook.
-5. **Set `AUTH_SECRET`** to a long random string in production.
+1. **Set `AUTH_SECRET`** to a long random string in Cloudflare Workers secrets or environment variables.
+2. **Neon**: create a project (Mumbai/`ap-southeast-1`), set `DATABASE_URL`, run `npm run db:push`, then replace the in-memory calls in `src/lib/store.ts` with Drizzle queries — every swap point is marked `// PROD:`.
+3. **MSG91**: complete TRAI DLT registration for the OTP template, set `MSG91_AUTH_KEY` + `MSG91_TEMPLATE_ID` — `sendOtp()` in `store.ts` already calls the MSG91 API when the key is present.
+4. **Upstash Redis**: swap the in-memory `rateLimit()` for `@upstash/ratelimit` (same call signature).
+5. **Payments**: in `POST /api/orders`, create a Razorpay/Cashfree order before saving, and confirm the order only from the payment webhook.
 6. **Photography**: replace `<ProductImage>` with `next/image` from your CDN — it's the only place placeholder art is generated.
-7. **Vercel**: `vercel deploy` — no config changes needed; prefer the `bom1` (Mumbai) region for functions.
 
 ## Pre-launch gaps to close (flagged, not yet built)
 
