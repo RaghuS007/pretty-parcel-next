@@ -1,0 +1,13 @@
+name = "pretty-parcel"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".open-next/assets"
+
+[vars]
+AUTH_SECRET = "change-me-before-production"
+
+# Uncomment when you add Neon / KV / D1 bindings:
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "pretty-parcel"
+# database_id = "YOUR_D1_DATABASE_ID"
